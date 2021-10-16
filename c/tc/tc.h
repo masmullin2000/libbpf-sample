@@ -36,7 +36,5 @@ struct tc_evt {
         struct arphdr arp;
     };
 };
-    
-
 
 #endif // __TC_H__

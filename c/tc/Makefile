@@ -18,6 +18,10 @@ skel: bpf
 
 .PHONY: run
 run: $(APP)
+	sudo ./$(APP) 53 5355 80 443 22
+
+.PHONY: block
+block: $(APP)
 	sudo ./$(APP)
 
 .PHONY: clean

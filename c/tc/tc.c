@@ -151,7 +151,7 @@ void allow_port(int map_fd, uint16_t port)
     key++;
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
     DECLARE_LIBBPF_OPTS(bpf_tc_hook, hook, .ifindex = 2, .attach_point = BPF_TC_EGRESS);
     DECLARE_LIBBPF_OPTS(bpf_tc_opts, opts, .handle = 1, .priority = 1);
@@ -173,11 +173,14 @@ int main(void)
     bpf_tc_attach(&hook, &opts);
     
     int map_fd = bpf_map__fd(skel->maps.ports);
-    allow_port(map_fd, 80);
-    allow_port(map_fd, 443);
-    allow_port(map_fd, 22);
-    allow_port(map_fd, 53);
-    allow_port(map_fd, 5355);
+    for (int i = 0; i < argc; i++) {
+        int port = atoi(argv[i]);
+        allow_port(map_fd, port);
+        /*allow_port(map_fd, 443);*/
+        /*allow_port(map_fd, 22);*/
+        /*allow_port(map_fd, 53);*/
+        /*allow_port(map_fd, 5355);*/
+    }
     struct ring_buffer *rb = ring_buffer__new(bpf_map__fd(skel->maps.rb), handle_evt, NULL, NULL);
 
     while(!exiting) {
