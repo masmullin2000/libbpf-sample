@@ -1,9 +1,5 @@
 APP=exec
 
-# NOTE: Mainline (5.18) and bpf-next version of bpftool has a segfault
-#       when generating exec.skel.h
-#
-
 # this is for using distribution provided bpftool
 BPFTOOL=bpftool
 
@@ -18,7 +14,7 @@ LINUX_KERNEL_DIR_BPF_NEXT=/code/bpf-next
 #LINUX_KERNEL_DIR=$(LINUX_KERNEL_DIR_MAINLINE)
 #LINUX_KERNEL_DIR=$(LINUX_KERNEL_DIR_STABLE)
 LINUX_KERNEL_DIR=$(LINUX_KERNEL_DIR_BPF_NEXT)
-#BPFTOOL=$(LINUX_KERNEL_DIR)/tools/bpf/bpftool/bpftool
+BPFTOOL=$(LINUX_KERNEL_DIR)/tools/bpf/bpftool/bpftool
 
 .PHONY: $(APP)
 $(APP): skel
