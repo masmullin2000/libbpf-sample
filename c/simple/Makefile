@@ -5,7 +5,7 @@ APP=exec
 #
 
 # this is for using distribution provided bpftool
-#BPFTOOL=bpftool
+BPFTOOL=bpftool
 
 # Change these to wherever you keep
 # your mainline and stable kernel
@@ -18,11 +18,10 @@ LINUX_KERNEL_DIR_BPF_NEXT=/code/bpf-next
 #LINUX_KERNEL_DIR=$(LINUX_KERNEL_DIR_MAINLINE)
 #LINUX_KERNEL_DIR=$(LINUX_KERNEL_DIR_STABLE)
 LINUX_KERNEL_DIR=$(LINUX_KERNEL_DIR_BPF_NEXT)
-BPFTOOL=$(LINUX_KERNEL_DIR)/tools/bpf/bpftool/bpftool
+#BPFTOOL=$(LINUX_KERNEL_DIR)/tools/bpf/bpftool/bpftool
 
 .PHONY: $(APP)
 $(APP): skel
-	# Fixup
 	clang exec.c -lbpf -lelf -o $(APP)
 
 .PHONY: vmlinux
