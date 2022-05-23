@@ -1,12 +1,23 @@
 APP=exec
 
+# NOTE: Current shipping stable kernel bpftool has a bug
+#       where the rodata is not correctly attributed to
+#       the exec.maps struct upon the generation of exec.skel.h
+#
+#       Mainline (5.18) and bpf-next version of bpftool has a segfault
+#       when generating exec.skel.h
+#
+BPFTOOL=bpftool
+
 .PHONY: $(APP)
 $(APP): skel
+	# Fixup
+	sed -i "s/obj->rodata/obj->maps.rodata/g" exec.skel.h
 	clang exec.c -lbpf -lelf -o $(APP)
 
 .PHONY: vmlinux
 vmlinux:
-	bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
+	$(BPFTOOL) btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
 
 .PHONY: bpf
 bpf: vmlinux
@@ -14,7 +25,7 @@ bpf: vmlinux
 
 .PHONY: skel
 skel: bpf
-	bpftool gen skeleton exec.bpf.o name exec > exec.skel.h
+	$(BPFTOOL) gen skeleton exec.bpf.o name exec > exec.skel.h
 
 .PHONY: run
 run: $(APP)
